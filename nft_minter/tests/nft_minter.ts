@@ -51,7 +51,7 @@ describe("nft_minter", async () => {
     const name = "Solana Course NFT";
     const symbol = "SOLC";
     const uri =
-      "https://raw.githubusercontent.com/arsenijkovalov/NFT-Program/main/nft_program/assets/nft.json";
+      "https://raw.githubusercontent.com/arsenijkovalov/nft-minter/main/nft_minter/assets/nft.json";
     const creators = [
       {
         address: payer.publicKey,
