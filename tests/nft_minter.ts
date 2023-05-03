@@ -92,7 +92,7 @@ describe("nft_minter", async () => {
       console.log(error);
     }
 
-    const [masterEdition, masterEditionBump] = findEditionAddress({
+    const [masterEdition] = findEditionAddress({
       mint: resourceMintKeypair.publicKey,
     });
 
