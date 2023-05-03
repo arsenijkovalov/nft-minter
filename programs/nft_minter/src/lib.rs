@@ -7,7 +7,7 @@ pub mod utils;
 use instructions::*;
 use utils::*;
 
-declare_id!("9RfmSGqVhV86ySm9ooh7mepKG6mNmaQuypZJGn5zrgbb");
+declare_id!("4Skqz2saV9eJoPerAdpt1Mn4ur3mX4qCZkvgKguBQpFB");
 
 #[program]
 pub mod nft_minter {
