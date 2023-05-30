@@ -22,7 +22,7 @@ export const findMetadataAddress = ({
     TOKEN_METADATA_PROGRAM_ID
   );
 
-export const findEditionAddress = ({
+export const findMasterEditionAddress = ({
   mint,
 }: {
   mint: anchor.web3.PublicKey;
@@ -46,7 +46,7 @@ describe("nft_minter", async () => {
   const nftMinterProgram = anchor.workspace.NftMinter as Program<NftMinter>;
 
   it("Test User Flow", async () => {
-    const resourceMintKeypair = anchor.web3.Keypair.generate();
+    const mintKeypair = anchor.web3.Keypair.generate();
 
     const name = "Solana Course NFT";
     const symbol = "SOLC";
@@ -63,7 +63,7 @@ describe("nft_minter", async () => {
     const is_mutable = true;
 
     const [metadata] = findMetadataAddress({
-      mint: resourceMintKeypair.publicKey,
+      mint: mintKeypair.publicKey,
     });
 
     // Create Token
@@ -79,27 +79,27 @@ describe("nft_minter", async () => {
         )
         .accounts({
           payer: payer.publicKey,
-          mintAccount: resourceMintKeypair.publicKey,
+          mintAccount: mintKeypair.publicKey,
           mintAuthority: payer.publicKey,
           updateAuthority: payer.publicKey,
           metadataAccount: metadata,
           tokenMetadataProgram: TOKEN_METADATA_PROGRAM_ID,
         })
-        .signers([resourceMintKeypair, payer.payer])
+        .signers([mintKeypair, payer.payer])
         .rpc();
       console.log("Transaction [Create Token]", tx);
     } catch (error) {
       console.log(error);
     }
 
-    const [masterEdition] = findEditionAddress({
-      mint: resourceMintKeypair.publicKey,
+    const [masterEdition] = findMasterEditionAddress({
+      mint: mintKeypair.publicKey,
     });
 
     const maxSupply = 1;
 
-    const resourceToken = anchor.utils.token.associatedAddress({
-      mint: resourceMintKeypair.publicKey,
+    const ata = anchor.utils.token.associatedAddress({
+      mint: mintKeypair.publicKey,
       owner: payer.publicKey,
     });
 
@@ -109,15 +109,15 @@ describe("nft_minter", async () => {
         .mintToken(new BN(maxSupply))
         .accounts({
           payer: payer.publicKey,
-          mintAccount: resourceMintKeypair.publicKey,
+          mintAccount: mintKeypair.publicKey,
           mintAuthority: payer.publicKey,
           updateAuthority: payer.publicKey,
-          associatedTokenAccount: resourceToken,
+          associatedTokenAccount: ata,
           metadataAccount: metadata,
           editionAccount: masterEdition,
           tokenMetadataProgram: TOKEN_METADATA_PROGRAM_ID,
         })
-        .signers([resourceMintKeypair, payer.payer])
+        .signers([mintKeypair, payer.payer])
         .rpc();
       console.log("Transaction [Mint Token]", tx);
     } catch (error) {
